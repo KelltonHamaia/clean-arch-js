@@ -5,12 +5,13 @@ describe('Cadastrar usuário usecase', () => {
   //Arrange
   const usuariosRepository = {
     cadastrar: jest.fn(),
+    existePorCPF: jest.fn(),
   }
 
   test('Deve poder cadastrar um usuário', async () => {
     /**
      * Conceito: Triple A
-     * Arrange: Preparação - Configura o estad inicial para os testes (ex: criar variáveis, funções, etc...)
+     * Arrange: Preparação - Configura o estado inicial para os testes (ex: criar variáveis, funções, etc...)
      * Act: Executar a ação que deve ser testada
      * Assert: Validar os retornos
      */
@@ -38,10 +39,24 @@ describe('Cadastrar usuário usecase', () => {
     expect(() => cadastrarUsuarioUsecase({})).toThrow(new AppError(AppError.dependencias))
   })
 
-  test('Deve retornar um throw new AppError se um ou mais campos obrigatórios não forem fornecidos', async () => {
+  test('Deve retornar um throw AppError se um ou mais campos obrigatórios não forem fornecidos', async () => {
     const sut = cadastrarUsuarioUsecase({ usuariosRepository })
     await expect(() => sut({})).rejects.toThrow(
       new AppError(AppError.parametrosObrigatoriosAusentes),
     )
+  })
+
+  test('Deve retornar um throw AppError se já existir um usuário cadastrado com o CPF', () => {
+    const usuarioDTO = {
+      nome_completo: 'nome_completo_VALIDO',
+      CPF: 'CPF_ja_cadastrado',
+      telefone: 'telefone_VALIDO',
+      endereco: 'endereco_VALIDO',
+      email: 'email_VALIDO',
+    }
+
+    usuariosRepository.existePorCPF.mockResolvedValue(true)
+    const sut = cadastrarUsuarioUsecase({ usuariosRepository })
+    expect(() => sut(usuarioDTO)).rejects.toThrow(new AppError('CPF já cadastrado'))
   })
 })
