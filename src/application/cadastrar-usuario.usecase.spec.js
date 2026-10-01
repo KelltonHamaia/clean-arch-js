@@ -1,3 +1,4 @@
+const AppError = require('../shared/errors/AppError.js')
 const cadastrarUsuarioUsecase = require('./cadastrar-usuario.usecase.js')
 
 describe('Cadastrar usuário usecase', () => {
@@ -24,7 +25,7 @@ describe('Cadastrar usuário usecase', () => {
 
   test('Deve retornar throw AppError se o usuarioRepository não for fornecido ', () => {
     expect(() => cadastrarUsuarioUsecase({})).toThrow(
-      'usuariosRepository não fornecido',
+      new AppError(AppError.dependencias),
     )
   })
 })
