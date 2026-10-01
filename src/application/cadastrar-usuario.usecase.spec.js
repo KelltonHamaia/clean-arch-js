@@ -21,4 +21,10 @@ describe('Cadastrar usuário usecase', () => {
     expect(usuariosRepository.cadastrar).toHaveBeenCalledTimes(1)
     expect(output).toBeUndefined()
   })
+
+  test('Deve retornar throw AppError se o usuarioRepository não for fornecido ', () => {
+    expect(() => cadastrarUsuarioUsecase({})).toThrow(
+      'usuariosRepository não fornecido',
+    )
+  })
 })
