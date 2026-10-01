@@ -1,3 +1,4 @@
+const { AppError } = require('../shared/errors')
 const buscarUsuarioPorCpfUsecase = require('./buscar-usuario-por-cpf.usecase')
 
 describe('Buscar usuário por CPF useCase', () => {
@@ -42,5 +43,9 @@ describe('Buscar usuário por CPF useCase', () => {
     expect(output.right).toBeNull()
     expect(usuariosRepository.buscarPorCPF).toHaveBeenCalledWith(cpfDTO.CPF)
     expect(usuariosRepository.buscarPorCPF).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um throw AppError caso o usuarioRepository não seja fornecido', () => {
+    expect(() => buscarUsuarioPorCpfUsecase({})).toThrow(new AppError(AppError.dependencias))
   })
 })
