@@ -1,4 +1,5 @@
 const AppError = require('../shared/errors/AppError.js')
+const Either = require('../shared/errors/Either.js')
 const cadastrarUsuarioUsecase = require('./cadastrar-usuario.usecase.js')
 
 describe('Cadastrar usuário usecase', () => {
@@ -32,7 +33,7 @@ describe('Cadastrar usuário usecase', () => {
     //ASSERTS
     expect(usuariosRepository.cadastrar).toHaveBeenCalledWith(usuarioDTO)
     expect(usuariosRepository.cadastrar).toHaveBeenCalledTimes(1)
-    expect(output).toBeUndefined()
+    expect(output.right).toBeNull()
   })
 
   test('Deve retornar throw AppError se o usuarioRepository não for fornecido', () => {
@@ -46,7 +47,7 @@ describe('Cadastrar usuário usecase', () => {
     )
   })
 
-  test('Deve retornar um throw AppError se já existir um usuário cadastrado com o CPF', () => {
+  test('Deve retornar um throw AppError se já existir um usuário cadastrado com o CPF', async () => {
     const usuarioDTO = {
       nome_completo: 'nome_completo_VALIDO',
       CPF: 'CPF_ja_cadastrado',
@@ -56,7 +57,13 @@ describe('Cadastrar usuário usecase', () => {
     }
 
     usuariosRepository.existePorCPF.mockResolvedValue(true)
+
     const sut = cadastrarUsuarioUsecase({ usuariosRepository })
-    expect(() => sut(usuarioDTO)).rejects.toThrow(new AppError('CPF já cadastrado'))
+    const output = await sut(usuarioDTO)
+
+    expect(output.right).toBeNull()
+    expect(output.left).toEqual(Either.valorJaCadastrado('CPF'))
+    expect(usuariosRepository.existePorCPF).toHaveBeenCalledWith(usuarioDTO.CPF)
+    expect(usuariosRepository.existePorCPF).toHaveBeenCalledTimes(1)
   })
 })
