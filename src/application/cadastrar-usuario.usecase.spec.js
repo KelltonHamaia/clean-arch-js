@@ -2,11 +2,20 @@ const AppError = require('../shared/errors/AppError.js')
 const cadastrarUsuarioUsecase = require('./cadastrar-usuario.usecase.js')
 
 describe('Cadastrar usuário usecase', () => {
+  //Arrange
   const usuariosRepository = {
     cadastrar: jest.fn(),
   }
 
   test('Deve poder cadastrar um usuário', async () => {
+    /**
+     * Conceito: Triple A
+     * Arrange: Preparação - Configura o estad inicial para os testes (ex: criar variáveis, funções, etc...)
+     * Act: Executar a ação que deve ser testada
+     * Assert: Validar os retornos
+     */
+
+    //Arrange
     const usuarioDTO = {
       nome_completo: 'nome_completo_VALIDO',
       CPF: 'CPF_VALIDO',
@@ -15,9 +24,11 @@ describe('Cadastrar usuário usecase', () => {
       email: 'email_VALIDO',
     }
     /* System under test => normalmente é o nome dado ao componente que queremos testar */
+    // ACT
     const sut = cadastrarUsuarioUsecase({ usuariosRepository })
     const output = await sut(usuarioDTO)
 
+    //ASSERTS
     expect(usuariosRepository.cadastrar).toHaveBeenCalledWith(usuarioDTO)
     expect(usuariosRepository.cadastrar).toHaveBeenCalledTimes(1)
     expect(output).toBeUndefined()
