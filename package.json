@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/KelltonHamaia/clean-arch-js#readme",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "jest": "^30.5.2"
   }
 }
