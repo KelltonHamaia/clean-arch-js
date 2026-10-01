@@ -11,7 +11,7 @@
 ## UseCases (Regras de negócio)
 
 [X] Cadastrar um novo usuário
-[ ] - CPF ou email devem ser únicos
+[X] - CPF ou email devem ser únicos
 
 [ ] Buscar um cadastro de usuário por CPF
 [ ] - Retornar um usuário ou vazio
@@ -39,8 +39,8 @@
 
 [X] cadastrar: ({nome_completo, CPF, telefone, endereco, email}) => Promise<void>
 [ ] buscarPorCPF: (CPF) => Promise<Usuario | null>
-[ ] existePorCPF: (CPF) => Promise<boolean>
-[ ] existePorEmail: (email) => Promise<boolean>
+[X] existePorCPF: (CPF) => Promise<boolean>
+[X] existePorEmail: (email) => Promise<boolean>
 
 ## livrosRepository
 

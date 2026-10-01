@@ -1,5 +1,4 @@
-const AppError = require('../shared/errors/AppError.js')
-const Either = require('../shared/errors/Either.js')
+const { AppError, Either } = require('../shared/errors')
 const cadastrarUsuarioUsecase = require('./cadastrar-usuario.usecase.js')
 
 describe('Cadastrar usuário usecase', () => {
@@ -7,9 +6,10 @@ describe('Cadastrar usuário usecase', () => {
   const usuariosRepository = {
     cadastrar: jest.fn(),
     existePorCPF: jest.fn(),
+    existePorEmail: jest.fn(),
   }
 
-  test('Deve poder cadastrar um usuário', async () => {
+  test('Deve poder cadastrar um usuário e retornar um Either.right null', async () => {
     /**
      * Conceito: Triple A
      * Arrange: Preparação - Configura o estado inicial para os testes (ex: criar variáveis, funções, etc...)
@@ -47,7 +47,7 @@ describe('Cadastrar usuário usecase', () => {
     )
   })
 
-  test('Deve retornar um throw AppError se já existir um usuário cadastrado com o CPF', async () => {
+  test('Deve retornar um Either.Left se já existir um usuário cadastrado com o CPF', async () => {
     const usuarioDTO = {
       nome_completo: 'nome_completo_VALIDO',
       CPF: 'CPF_ja_cadastrado',
@@ -65,5 +65,26 @@ describe('Cadastrar usuário usecase', () => {
     expect(output.left).toEqual(Either.valorJaCadastrado('CPF'))
     expect(usuariosRepository.existePorCPF).toHaveBeenCalledWith(usuarioDTO.CPF)
     expect(usuariosRepository.existePorCPF).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um Either.Left se já existir um usuário cadastrado com o Email', async () => {
+    usuariosRepository.existePorCPF.mockResolvedValue(false)
+    usuariosRepository.existePorEmail.mockResolvedValue(true)
+
+    const usuarioDTO = {
+      nome_completo: 'nome_completo_VALIDO',
+      CPF: 'CPF_VALIDO',
+      telefone: 'telefone_VALIDO',
+      endereco: 'endereco_VALIDO',
+      email: 'email_ja_cadastrado',
+    }
+
+    const sut = cadastrarUsuarioUsecase({ usuariosRepository })
+    const output = await sut(usuarioDTO)
+
+    expect(output.right).toBeNull()
+    expect(output.left).toEqual(Either.valorJaCadastrado('EMAIL'))
+    expect(usuariosRepository.existePorEmail).toHaveBeenCalledWith(usuarioDTO.email)
+    expect(usuariosRepository.existePorEmail).toHaveBeenCalledTimes(1)
   })
 })
