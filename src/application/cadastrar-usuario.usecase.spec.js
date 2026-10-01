@@ -34,9 +34,14 @@ describe('Cadastrar usuário usecase', () => {
     expect(output).toBeUndefined()
   })
 
-  test('Deve retornar throw AppError se o usuarioRepository não for fornecido ', () => {
-    expect(() => cadastrarUsuarioUsecase({})).toThrow(
-      new AppError(AppError.dependencias),
+  test('Deve retornar throw AppError se o usuarioRepository não for fornecido', () => {
+    expect(() => cadastrarUsuarioUsecase({})).toThrow(new AppError(AppError.dependencias))
+  })
+
+  test('Deve retornar um throw new AppError se um ou mais campos obrigatórios não forem fornecidos', async () => {
+    const sut = cadastrarUsuarioUsecase({ usuariosRepository })
+    await expect(() => sut({})).rejects.toThrow(
+      new AppError(AppError.parametrosObrigatoriosAusentes),
     )
   })
 })

@@ -2,5 +2,6 @@
   "semi": false,
   "quoteProps": "as-needed",
   "singleQuote": true,
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "printWidth": 100
 }
