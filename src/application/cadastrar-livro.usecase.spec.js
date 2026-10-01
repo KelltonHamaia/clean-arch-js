@@ -1,3 +1,4 @@
+const { AppError } = require('../shared/errors')
 const cadastrarLivroUsecase = require('./cadastrar-livro.usecase')
 
 describe('Cadastrar livro usecase', () => {
@@ -20,5 +21,9 @@ describe('Cadastrar livro usecase', () => {
     expect(output.right).toBeNull()
     expect(livrosRepository.cadastrar).toHaveBeenCalledWith(livroDTO)
     expect(livrosRepository.cadastrar).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um throw AppError caso o LivrosRepository não seja fornecido', () => {
+    expect(() => cadastrarLivroUsecase({})).toThrow(new AppError(AppError.dependencias))
   })
 })
