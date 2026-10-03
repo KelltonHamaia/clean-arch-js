@@ -6,6 +6,10 @@ module.exports = function buscarLivroPorNomeOuISBNUsecase({ livrosRepository }) 
   }
 
   return async ({ valor }) => {
+    if (!valor) {
+      throw new AppError(AppError.parametrosObrigatoriosAusentes)
+    }
+
     const resultado = await livrosRepository.buscarLivroPorNomeOuISBN(valor)
     return Either.Right(resultado)
   }

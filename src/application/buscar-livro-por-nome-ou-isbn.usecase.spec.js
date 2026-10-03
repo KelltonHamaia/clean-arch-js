@@ -48,4 +48,11 @@ describe('Buscar livro por nome ou ISBN usecase', () => {
   test('Deve retornar um throw AppError se o livrosRepository nao for fornecido', () => {
     expect(() => buscarLivroPorNomeOuIsbnUsecase({})).toThrow(new AppError(AppError.dependencias))
   })
+
+  test('Deve retornar um throw AppError quando um ou mais valores obrigatórios não forem fornecidos', async () => {
+    const sut = buscarLivroPorNomeOuIsbnUsecase({ livrosRepository })
+    await expect(() => sut({})).rejects.toThrow(
+      new AppError(AppError.parametrosObrigatoriosAusentes),
+    )
+  })
 })
