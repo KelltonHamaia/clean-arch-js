@@ -1,0 +1,32 @@
+const buscarLivroPorNomeOuIsbnUsecase = require('./buscar-livro-por-nome-ou-isbn.usecase')
+
+describe('Buscar livro por nome ou ISBN usecase', () => {
+  const livrosRepository = {
+    buscarLivroPorNomeOuISBN: jest.fn(),
+  }
+
+  test('Deve retornar um array de livros válidos ao buscar por nome ou ISBN existentes', async () => {
+    const nomeOuISBNDTO = {
+      valor: 'valor_valido',
+    }
+
+    const outputDTO = [
+      {
+        nome: 'valor_valido',
+        quantidade: 'quantidade_valido',
+        autor: 'autor_valido',
+        genero: 'genero_valido',
+        ISBN: 'ISBN_valido',
+      },
+    ]
+
+    livrosRepository.buscarLivroPorNomeOuISBN.mockResolvedValue(outputDTO)
+
+    const sut = buscarLivroPorNomeOuIsbnUsecase({ livrosRepository })
+    const output = await sut(nomeOuISBNDTO)
+
+    expect(output.right).toEqual(outputDTO)
+    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledWith(nomeOuISBNDTO.valor)
+    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledTimes(1)
+  })
+})
