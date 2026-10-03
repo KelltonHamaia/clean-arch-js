@@ -19,7 +19,21 @@ describe('Buscar livro por nome ou ISBN usecase', () => {
         ISBN: 'ISBN_valido',
       },
     ]
+    livrosRepository.buscarLivroPorNomeOuISBN.mockResolvedValue(outputDTO)
 
+    const sut = buscarLivroPorNomeOuIsbnUsecase({ livrosRepository })
+    const output = await sut(nomeOuISBNDTO)
+
+    expect(output.right).toEqual(outputDTO)
+    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledWith(nomeOuISBNDTO.valor)
+    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um array vazio se não existir um livro por nome ou ISBN informados', async () => {
+    const nomeOuISBNDTO = {
+      valor: 'valor_NOME_ISBN_nao_cadastrado',
+    }
+    const outputDTO = []
     livrosRepository.buscarLivroPorNomeOuISBN.mockResolvedValue(outputDTO)
 
     const sut = buscarLivroPorNomeOuIsbnUsecase({ livrosRepository })
