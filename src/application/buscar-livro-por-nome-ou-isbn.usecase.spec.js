@@ -1,3 +1,4 @@
+const { AppError } = require('../shared/errors')
 const buscarLivroPorNomeOuIsbnUsecase = require('./buscar-livro-por-nome-ou-isbn.usecase')
 
 describe('Buscar livro por nome ou ISBN usecase', () => {
@@ -42,5 +43,9 @@ describe('Buscar livro por nome ou ISBN usecase', () => {
     expect(output.right).toEqual(outputDTO)
     expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledWith(nomeOuISBNDTO.valor)
     expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um throw AppError se o livrosRepository nao for fornecido', () => {
+    expect(() => buscarLivroPorNomeOuIsbnUsecase({})).toThrow(new AppError(AppError.dependencias))
   })
 })
