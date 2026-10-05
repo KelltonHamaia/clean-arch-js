@@ -40,4 +40,23 @@ describe('Emprestar livro UseCase', () => {
 
     expect(output.left).toEqual(Either.dataRetornoMenorQueDataSaida())
   })
+
+  test('Não deve permitir o empréstimo de um livro com o mesmo ISBN para o mesmo usuário antes que o livro anterior não tenha sido devolvido', async () => {
+    const emprestarLivroDTO = {
+      usuario_id: 'usuario_id_VALIDO',
+      livro_id: 'livro_id_VALIDO',
+      data_saida: new Date('2026-10-01'),
+      data_retorno: new Date('2026-10-01'),
+    }
+    emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario.mockResolvedValue(true)
+    const sut = emprestarLivroUsecase({ emprestimosRepository })
+    const output = await sut(emprestarLivroDTO)
+
+    expect(output.left).toEqual(Either.livroISBNEmprestimoPendenteUsuario())
+    expect(emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario).toHaveBeenCalledWith({
+      usuario_id: emprestarLivroDTO.usuario_id,
+      livro_id: emprestarLivroDTO.livro_id,
+    })
+    expect(emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario).toHaveBeenCalledTimes(1)
+  })
 })

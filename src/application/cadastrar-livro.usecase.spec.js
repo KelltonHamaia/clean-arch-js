@@ -53,4 +53,6 @@ describe('Cadastrar livro usecase', () => {
     expect(livrosRepository.existePorISBN).toHaveBeenCalledWith(livroDTO.ISBN)
     expect(livrosRepository.existePorISBN).toHaveBeenCalledTimes(1)
   })
+
+  test('Não deve permitir o empréstimo de um livro com o mesmo ISBN para o mesmo usuário antes que o livro anterior não tenha sido devolvido', async () => {})
 })
