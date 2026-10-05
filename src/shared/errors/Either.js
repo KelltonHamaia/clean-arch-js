@@ -16,7 +16,9 @@ class Either {
   }
 
   static valorJaCadastrado(valor) {
-    return `${valor} já cadastrado.`
+    return {
+      message: `${valor} já cadastrado.`,
+    }
   }
 }
 

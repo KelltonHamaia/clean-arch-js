@@ -49,7 +49,7 @@ describe('Cadastrar livro usecase', () => {
     const sut = cadastrarLivroUseCase({ livrosRepository })
     const output = await sut(livroDTO)
 
-    expect(output.left).toBe(Either.valorJaCadastrado('ISBN'))
+    expect(output.left).toEqual(Either.valorJaCadastrado('ISBN'))
     expect(livrosRepository.existePorISBN).toHaveBeenCalledWith(livroDTO.ISBN)
     expect(livrosRepository.existePorISBN).toHaveBeenCalledTimes(1)
   })
