@@ -12,7 +12,7 @@ module.exports = function emprestarLivroUsecase({ emprestimosRepository }) {
     }
 
     if (data_saida.getTime() > data_retorno.getTime()) {
-      return Either.Left(Either.dataRetornoMenorQueDataSaida)
+      return Either.Left(Either.dataRetornoMenorQueDataSaida())
     }
 
     const existeLivroISBNEmprestimoPendenteUsuario =
@@ -22,7 +22,7 @@ module.exports = function emprestarLivroUsecase({ emprestimosRepository }) {
       })
 
     if (existeLivroISBNEmprestimoPendenteUsuario) {
-      return Either.Left(Either.livroISBNEmprestimoPendenteUsuario)
+      return Either.Left(Either.livroISBNEmprestimoPendenteUsuario())
     }
 
     await emprestimosRepository.emprestar({ usuario_id, livro_id, data_saida, data_retorno })

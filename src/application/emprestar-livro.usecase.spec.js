@@ -1,3 +1,4 @@
+const { Either } = require('../shared/errors')
 const emprestarLivroUsecase = require('./emprestar-livro.usecase')
 
 describe('Emprestar livro UseCase', () => {
@@ -24,5 +25,19 @@ describe('Emprestar livro UseCase', () => {
     })
     expect(emprestimosRepository.emprestar).toHaveBeenCalledWith(emprestarLivroDTO)
     expect(emprestimosRepository.emprestar).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um Either.Left se a data de retorno for menor que a data de saída', async () => {
+    const emprestarLivroDataInvalidaDTO = {
+      usuario_id: 'usuario_id_VALIDO',
+      livro_id: 'livro_id_VALIDO',
+      data_saida: new Date('2026-10-02'),
+      data_retorno: new Date('2026-10-01'),
+    }
+
+    const sut = emprestarLivroUsecase({ emprestimosRepository })
+    const output = await sut(emprestarLivroDataInvalidaDTO)
+
+    expect(output.left).toEqual(Either.dataRetornoMenorQueDataSaida())
   })
 })
