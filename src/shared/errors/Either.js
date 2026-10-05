@@ -20,6 +20,19 @@ class Either {
       message: `${valor} já cadastrado.`,
     }
   }
+
+  static dataRetornoMenorQueDataSaida() {
+    return {
+      message:
+        'A data de retorno do empréstimo não pode ser maior que a data de saída do empréstimo',
+    }
+  }
+
+  static livroISBNEmprestimoPendenteUsuario() {
+    return {
+      message: 'Livro com ISBN já emprestado ao usuário e ainda não devolvido',
+    }
+  }
 }
 
 module.exports = Either
