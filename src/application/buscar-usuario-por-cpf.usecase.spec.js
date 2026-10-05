@@ -1,5 +1,5 @@
 const { AppError } = require('../shared/errors')
-const buscarUsuarioPorCpfUsecase = require('./buscar-usuario-por-cpf.usecase')
+const buscarUsuarioPorCpfUseCase = require('./buscar-usuario-por-cpf.usecase')
 
 describe('Buscar usuário por CPF useCase', () => {
   const usuariosRepository = {
@@ -22,7 +22,7 @@ describe('Buscar usuário por CPF useCase', () => {
 
     usuariosRepository.buscarPorCPF.mockResolvedValue(outputDTO)
 
-    const sut = buscarUsuarioPorCpfUsecase({ usuariosRepository })
+    const sut = buscarUsuarioPorCpfUseCase({ usuariosRepository })
     const output = await sut({ CPF: cpfDTO.CPF })
 
     expect(output.left).toBeNull()
@@ -37,7 +37,7 @@ describe('Buscar usuário por CPF useCase', () => {
       CPF: 'CPF_nao_cadastrado_na_base',
     }
 
-    const sut = buscarUsuarioPorCpfUsecase({ usuariosRepository })
+    const sut = buscarUsuarioPorCpfUseCase({ usuariosRepository })
     const output = await sut({ CPF: cpfDTO.CPF })
 
     expect(output.right).toBeNull()
@@ -46,11 +46,11 @@ describe('Buscar usuário por CPF useCase', () => {
   })
 
   test('Deve retornar um throw AppError caso o usuarioRepository não seja fornecido', () => {
-    expect(() => buscarUsuarioPorCpfUsecase({})).toThrow(new AppError(AppError.dependencias))
+    expect(() => buscarUsuarioPorCpfUseCase({})).toThrow(new AppError(AppError.dependencias))
   })
 
   test('Deve retornar um throw AppError caso o CPF não seja informado', async () => {
-    const sut = buscarUsuarioPorCpfUsecase({ usuariosRepository })
+    const sut = buscarUsuarioPorCpfUseCase({ usuariosRepository })
     await expect(() => sut({})).rejects.toThrow(
       new AppError(AppError.parametrosObrigatoriosAusentes),
     )

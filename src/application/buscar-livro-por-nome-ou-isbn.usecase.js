@@ -1,6 +1,6 @@
 const { Either, AppError } = require('../shared/errors')
 
-module.exports = function buscarLivroPorNomeOuISBNUsecase({ livrosRepository }) {
+module.exports = function buscarLivroPorNomeOuISBNUseCase({ livrosRepository }) {
   if (!livrosRepository) {
     throw new AppError(AppError.dependencias)
   }

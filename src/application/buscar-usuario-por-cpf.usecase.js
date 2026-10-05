@@ -1,6 +1,6 @@
 const { Either, AppError } = require('../shared/errors')
 
-module.exports = function buscarUsuarioPorCPFUsecase({ usuariosRepository }) {
+module.exports = function buscarUsuarioPorCPFUseCase({ usuariosRepository }) {
   if (!usuariosRepository) {
     throw new AppError(AppError.dependencias)
   }

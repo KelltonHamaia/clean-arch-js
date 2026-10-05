@@ -1,5 +1,5 @@
 const { AppError, Either } = require('../shared/errors')
-const cadastrarLivroUsecase = require('./cadastrar-livro.usecase')
+const cadastrarLivroUseCase = require('./cadastrar-livro.usecase')
 
 describe('Cadastrar livro usecase', () => {
   const livrosRepository = {
@@ -16,7 +16,7 @@ describe('Cadastrar livro usecase', () => {
       ISBN: 'ISBN_valido',
     }
 
-    const sut = cadastrarLivroUsecase({ livrosRepository })
+    const sut = cadastrarLivroUseCase({ livrosRepository })
     const output = await sut(livroDTO)
 
     expect(output.right).toBeNull()
@@ -25,11 +25,11 @@ describe('Cadastrar livro usecase', () => {
   })
 
   test('Deve retornar um throw AppError caso o LivrosRepository não seja fornecido', () => {
-    expect(() => cadastrarLivroUsecase({})).toThrow(new AppError(AppError.dependencias))
+    expect(() => cadastrarLivroUseCase({})).toThrow(new AppError(AppError.dependencias))
   })
 
   test('Deve retornar um throw AppError caso estejam faltando um ou mais campos', async () => {
-    const sut = cadastrarLivroUsecase({ livrosRepository })
+    const sut = cadastrarLivroUseCase({ livrosRepository })
     await expect(() => sut({})).rejects.toThrow(
       new AppError(AppError.parametrosObrigatoriosAusentes),
     )
@@ -46,7 +46,7 @@ describe('Cadastrar livro usecase', () => {
       ISBN: 'ISBN_JA_CADASTRADO',
     }
 
-    const sut = cadastrarLivroUsecase({ livrosRepository })
+    const sut = cadastrarLivroUseCase({ livrosRepository })
     const output = await sut(livroDTO)
 
     expect(output.left).toBe(Either.valorJaCadastrado('ISBN'))
