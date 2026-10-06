@@ -63,4 +63,11 @@ describe('Emprestar livro UseCase', () => {
   test('Deve retornar um throw AppError caso o emprestimosRepository não seja fornecido', () => {
     expect(() => emprestarLivroUsecase({})).toThrow(new AppError(AppError.dependencias))
   })
+
+  test('Deve retornar um throw AppError caso um ou mais campos obrigatórios não sejam fornecidos', async () => {
+    const sut = emprestarLivroUsecase({ emprestimosRepository })
+    await expect(() => sut({})).rejects.toThrow(
+      new AppError(AppError.parametrosObrigatoriosAusentes),
+    )
+  })
 })
