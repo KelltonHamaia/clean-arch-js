@@ -2,8 +2,13 @@ const { Either } = require('../shared/errors')
 
 module.exports = function devolverLivroUseCase({ emprestimosRepository }) {
   return async ({ emprestimo_id, data_devolucao }) => {
-    await emprestimosRepository.devolver({ emprestimo_id, data_devolucao })
-    const verificarMulta = 'Multa por atraso: R$ 0'
+    const { data_retorno } = await emprestimosRepository.devolver({ emprestimo_id, data_devolucao })
+
+    let verificarMulta = 'Multa por atraso: R$ 0'
+    const ehDevolucaoAtrasada = data_retorno.getTime() < data_devolucao.getTime()
+    if (ehDevolucaoAtrasada) {
+      verificarMulta = 'Multa por atraso: R$ 10,00'
+    }
 
     return Either.Right(verificarMulta)
   }

@@ -6,6 +6,9 @@ describe('Devolver livro usecase', () => {
   }
 
   test('Deve ser possível devolver um livro sem gerar multa por atraso', async () => {
+    emprestimosRepository.devolver.mockResolvedValue({
+      data_retorno: new Date('2026-10-05'),
+    })
     const devolverLivroDTO = {
       emprestimo_id: 'id_emprestimo_valido',
       data_devolucao: new Date('2026-10-05'),
@@ -15,6 +18,23 @@ describe('Devolver livro usecase', () => {
     const output = await sut(devolverLivroDTO)
 
     expect(output.right).toBe('Multa por atraso: R$ 0')
+    expect(emprestimosRepository.devolver).toHaveBeenCalledWith(devolverLivroDTO)
+    expect(emprestimosRepository.devolver).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve ser possível devolver um livro sem gerar multa por atraso', async () => {
+    emprestimosRepository.devolver.mockResolvedValue({
+      data_retorno: new Date('2026-10-04'),
+    })
+
+    const devolverLivroDTO = {
+      emprestimo_id: 'id_emprestimo_valido',
+      data_devolucao: new Date('2026-10-05'),
+    }
+    const sut = devolverLivroUseCase({ emprestimosRepository })
+    const output = await sut(devolverLivroDTO)
+
+    expect(output.right).toBe('Multa por atraso: R$ 10,00')
     expect(emprestimosRepository.devolver).toHaveBeenCalledWith(devolverLivroDTO)
     expect(emprestimosRepository.devolver).toHaveBeenCalledTimes(1)
   })
