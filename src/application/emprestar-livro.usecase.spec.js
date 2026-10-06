@@ -5,6 +5,11 @@ describe('Emprestar livro UseCase', () => {
   const emprestimosRepository = {
     existeLivroISBNEmprestimoPendenteUsuario: jest.fn(),
     emprestar: jest.fn(),
+    buscarEmprestimoComLivroComUsuarioPorID: jest.fn(),
+  }
+
+  const emailService = {
+    enviarEmail: jest.fn(),
   }
 
   test('Deve poder emprestar um livro', async () => {
@@ -15,7 +20,22 @@ describe('Emprestar livro UseCase', () => {
       data_retorno: new Date('2026-10-01'),
     }
 
-    const sut = emprestarLivroUsecase({ emprestimosRepository })
+    const emprestimoComLivroComUsuarioPorIDDTO = {
+      usuario: {
+        nome: 'nome_usuario_VALIDO',
+        email: 'email_VALIDO',
+        CPF: 'CPF_VALIDO',
+      },
+      livro: {
+        nome: 'nome_livro_VALIDO',
+      },
+    }
+
+    emprestimosRepository.emprestar.mockResolvedValue('id_VALIDO')
+    emprestimosRepository.buscarEmprestimoComLivroComUsuarioPorID.mockResolvedValue(
+      emprestimoComLivroComUsuarioPorIDDTO,
+    )
+    const sut = emprestarLivroUsecase({ emprestimosRepository, emailService })
     const output = await sut(emprestarLivroDTO)
 
     expect(output.right).toBeNull()
@@ -25,6 +45,19 @@ describe('Emprestar livro UseCase', () => {
     })
     expect(emprestimosRepository.emprestar).toHaveBeenCalledWith(emprestarLivroDTO)
     expect(emprestimosRepository.emprestar).toHaveBeenCalledTimes(1)
+    expect(emprestimosRepository.buscarEmprestimoComLivroComUsuarioPorID).toHaveBeenCalledWith(
+      'id_VALIDO',
+    )
+    expect(emprestimosRepository.buscarEmprestimoComLivroComUsuarioPorID).toHaveBeenCalledTimes(1)
+    expect(emailService.enviarEmail).toHaveBeenCalledWith({
+      data_retorno: emprestarLivroDTO.data_retorno,
+      data_saida: emprestarLivroDTO.data_saida,
+      nome_usuario: emprestimoComLivroComUsuarioPorIDDTO.usuario.nome,
+      email: emprestimoComLivroComUsuarioPorIDDTO.usuario.email,
+      CPF: emprestimoComLivroComUsuarioPorIDDTO.usuario.CPF,
+      nome_livro: emprestimoComLivroComUsuarioPorIDDTO.livro.nome,
+    })
+    expect(emailService.enviarEmail).toHaveBeenCalledTimes(1)
   })
 
   test('Deve retornar um Either.Left se a data de retorno for menor que a data de saída', async () => {
@@ -35,7 +68,7 @@ describe('Emprestar livro UseCase', () => {
       data_retorno: new Date('2026-10-01'),
     }
 
-    const sut = emprestarLivroUsecase({ emprestimosRepository })
+    const sut = emprestarLivroUsecase({ emprestimosRepository, emailService })
     const output = await sut(emprestarLivroDataInvalidaDTO)
 
     expect(output.left).toEqual(Either.dataRetornoMenorQueDataSaida())
@@ -49,7 +82,7 @@ describe('Emprestar livro UseCase', () => {
       data_retorno: new Date('2026-10-01'),
     }
     emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario.mockResolvedValue(true)
-    const sut = emprestarLivroUsecase({ emprestimosRepository })
+    const sut = emprestarLivroUsecase({ emprestimosRepository, emailService })
     const output = await sut(emprestarLivroDTO)
 
     expect(output.left).toEqual(Either.livroISBNEmprestimoPendenteUsuario())
@@ -65,7 +98,7 @@ describe('Emprestar livro UseCase', () => {
   })
 
   test('Deve retornar um throw AppError caso um ou mais campos obrigatórios não sejam fornecidos', async () => {
-    const sut = emprestarLivroUsecase({ emprestimosRepository })
+    const sut = emprestarLivroUsecase({ emprestimosRepository, emailService })
     await expect(() => sut({})).rejects.toThrow(
       new AppError(AppError.parametrosObrigatoriosAusentes),
     )

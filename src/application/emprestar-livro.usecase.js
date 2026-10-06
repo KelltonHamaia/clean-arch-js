@@ -1,7 +1,7 @@
 const { AppError, Either } = require('../shared/errors')
 
-module.exports = function emprestarLivroUsecase({ emprestimosRepository }) {
-  if (!emprestimosRepository) {
+module.exports = function emprestarLivroUsecase({ emprestimosRepository, emailService }) {
+  if (!emprestimosRepository || !emailService) {
     throw new AppError(AppError.dependencias)
   }
 
@@ -25,7 +25,25 @@ module.exports = function emprestarLivroUsecase({ emprestimosRepository }) {
       return Either.Left(Either.livroISBNEmprestimoPendenteUsuario())
     }
 
-    await emprestimosRepository.emprestar({ usuario_id, livro_id, data_saida, data_retorno })
+    const emprestimoId = await emprestimosRepository.emprestar({
+      usuario_id,
+      livro_id,
+      data_saida,
+      data_retorno,
+    })
+
+    const { usuario, livro } =
+      await emprestimosRepository.buscarEmprestimoComLivroComUsuarioPorID(emprestimoId)
+
+    await emailService.enviarEmail({
+      data_saida,
+      data_retorno,
+      nome_usuario: usuario.nome,
+      email: usuario.email,
+      CPF: usuario.CPF,
+      nome_livro: livro.nome,
+    })
+
     return Either.Right(null)
   }
 }
