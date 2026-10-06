@@ -1,4 +1,4 @@
-const { Either } = require('../shared/errors')
+const { Either, AppError } = require('../shared/errors')
 const emprestarLivroUsecase = require('./emprestar-livro.usecase')
 
 describe('Emprestar livro UseCase', () => {
@@ -58,5 +58,9 @@ describe('Emprestar livro UseCase', () => {
       livro_id: emprestarLivroDTO.livro_id,
     })
     expect(emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um throw AppError caso o emprestimosRepository não seja fornecido', () => {
+    expect(() => emprestarLivroUsecase({})).toThrow(new AppError(AppError.dependencias))
   })
 })
