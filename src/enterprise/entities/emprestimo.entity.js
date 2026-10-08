@@ -7,7 +7,7 @@ const emprestimoEntity = () => {
 
   const calcularMulta = ({ data_retorno, data_devolucao }) => {
     if (!data_retorno || !data_devolucao) {
-      throw new AppError(AppError.dependencias)
+      throw new AppError(AppError.parametrosObrigatoriosAusentes)
     }
 
     const ehDevolucaoAtrasada = verificarSeEhDevolucaoAtrasada({ data_retorno, data_devolucao })

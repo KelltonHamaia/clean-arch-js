@@ -4,7 +4,9 @@ const emprestimoEntity = require('./emprestimo.entity')
 describe('Emprestimo entity', () => {
   test('Deve retornar um throw AppError se uma dependencia não for fornecida', () => {
     const sut = emprestimoEntity
-    expect(() => sut.calcularMulta({})).toThrow(new AppError(AppError.dependencias))
+    expect(() => sut.calcularMulta({})).toThrow(
+      new AppError(AppError.parametrosObrigatoriosAusentes),
+    )
   })
 
   test('Deve calcular uma multa sem atraso', () => {
