@@ -1,3 +1,4 @@
+const emprestimoEntity = require('../enterprise/entities/emprestimo.entity')
 const { Either, AppError } = require('../shared/errors')
 
 module.exports = function devolverLivroUseCase({ emprestimosRepository }) {
@@ -13,12 +14,7 @@ module.exports = function devolverLivroUseCase({ emprestimosRepository }) {
 
     const { data_retorno } = await emprestimosRepository.devolver({ emprestimo_id, data_devolucao })
 
-    let verificarMulta = 'Multa por atraso: R$ 0'
-    const ehDevolucaoAtrasada = data_retorno.getTime() < data_devolucao.getTime()
-    if (ehDevolucaoAtrasada) {
-      verificarMulta = 'Multa por atraso: R$ 10,00'
-    }
-
+    let verificarMulta = emprestimoEntity.calcularMulta({ data_retorno, data_devolucao })
     return Either.Right(verificarMulta)
   }
 }
