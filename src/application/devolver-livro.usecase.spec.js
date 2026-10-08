@@ -1,3 +1,4 @@
+const { AppError } = require('../shared/errors')
 const devolverLivroUseCase = require('./devolver-livro.usecase')
 
 describe('Devolver livro usecase', () => {
@@ -37,5 +38,9 @@ describe('Devolver livro usecase', () => {
     expect(output.right).toBe('Multa por atraso: R$ 10,00')
     expect(emprestimosRepository.devolver).toHaveBeenCalledWith(devolverLivroDTO)
     expect(emprestimosRepository.devolver).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um throw AppError se o emprestimosRepository não for fornecido', () => {
+    expect(() => devolverLivroUseCase({})).toThrow(new AppError(AppError.dependencias))
   })
 })

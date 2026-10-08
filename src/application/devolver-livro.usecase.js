@@ -1,6 +1,10 @@
-const { Either } = require('../shared/errors')
+const { Either, AppError } = require('../shared/errors')
 
 module.exports = function devolverLivroUseCase({ emprestimosRepository }) {
+  if (!emprestimosRepository) {
+    throw new AppError(AppError.dependencias)
+  }
+
   return async ({ emprestimo_id, data_devolucao }) => {
     const { data_retorno } = await emprestimosRepository.devolver({ emprestimo_id, data_devolucao })
 
