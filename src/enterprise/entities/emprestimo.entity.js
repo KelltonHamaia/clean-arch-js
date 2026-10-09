@@ -2,7 +2,7 @@ const { AppError } = require('../../shared/errors')
 
 const emprestimoEntity = () => {
   const verificarSeEhDevolucaoAtrasada = ({ data_retorno, data_devolucao }) => {
-    return data_retorno.getTime() < data_devolucao.getTime()
+    return new Date(data_retorno).getTime() < new Date(data_devolucao).getTime()
   }
 
   const calcularMulta = ({ data_retorno, data_devolucao }) => {
