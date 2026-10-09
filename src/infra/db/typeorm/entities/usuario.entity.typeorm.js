@@ -23,5 +23,8 @@ module.exports = new EntitySchema({
       type: 'varchar',
       unique: true,
     },
+    endereco: {
+      type: 'varchar',
+    },
   },
 })
