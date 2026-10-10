@@ -21,10 +21,19 @@ const usuariosRepository = () => {
     return !!existePorCPF
   }
 
+  const existePorEmail = async (email) => {
+    const existePorEmail = await typeormUsuariosRepository.findOne({
+      where: { email },
+    })
+
+    return !!existePorEmail
+  }
+
   return {
     cadastrar,
     buscarPorCPF,
     existePorCPF,
+    existePorEmail,
   }
 }
 

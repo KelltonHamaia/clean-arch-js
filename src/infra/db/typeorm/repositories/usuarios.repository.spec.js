@@ -49,4 +49,17 @@ describe('Usuarios repository', () => {
     const existePorCPF = await sut.existePorCPF('CPF_NAO_CADASTRADO')
     expect(existePorCPF).toBe(false)
   })
+
+  test('Deve retornar true caso encontre um usuário buscando pelo EMAIL', async () => {
+    await typeormUsuariosRepository.save(usuarioDTO)
+    const existePorCPF = await sut.existePorEmail('EMAIL_VALIDO')
+
+    expect(existePorCPF).toBe(true)
+  })
+
+  test('Deve retornar true caso não encontre um usuário buscando pelo EMAIL', async () => {
+    const existePorCPF = await sut.existePorEmail('EMAIL_VALIDO')
+
+    expect(existePorCPF).toBe(false)
+  })
 })
