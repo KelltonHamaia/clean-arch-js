@@ -13,9 +13,18 @@ const usuariosRepository = () => {
     return usuario
   }
 
+  const existePorCPF = async (CPF) => {
+    const existePorCPF = await typeormUsuariosRepository.findOne({
+      where: { CPF },
+    })
+
+    return !!existePorCPF
+  }
+
   return {
     cadastrar,
     buscarPorCPF,
+    existePorCPF,
   }
 }
 
