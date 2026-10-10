@@ -32,4 +32,11 @@ describe('Usuarios repository', () => {
     expect(usuarioBuscadoPorCPFCadastrado.id).toBeDefined()
     expect(usuarioBuscadoPorCPFCadastrado.CPF).toBe('CPF_VALIDO')
   })
+
+  test('Deve retornar null se não encontrar um usuário buscando pelo CPF', async () => {
+    const sut = usuariosRepository()
+    const usuarioNull = await sut.buscarPorCPF('CPF_NAO_CADASTRADO')
+
+    expect(usuarioNull).toBeNull()
+  })
 })
