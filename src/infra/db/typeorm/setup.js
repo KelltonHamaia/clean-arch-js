@@ -5,7 +5,10 @@ const typeormServer = new typeorm.DataSource({
   database: 'db.sqlite',
   synchronize: true,
   dropSchema: true,
-  entities: [require('./entities/usuario.entity.typeorm')],
+  entities: [
+    require('./entities/usuario.entity.typeorm'),
+    require('./entities/livro.entity.typeorm'),
+  ],
 })
 
 module.exports = typeormServer
