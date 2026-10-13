@@ -35,12 +35,31 @@ describe('Livros repository', () => {
     expect(output).toBe(false)
   })
 
-  test('deve retornar o livro caso encontre pelo nome ou ISBN', async () => {
+  test('deve retornar o livro caso encontre pelo nome ou ISBN utilizando o nome correto', async () => {
     await typeormLivrosRepository.save(livroDTO)
 
     const output = await sut.buscarPorNomeOuISBN('nome_valido')
     expect(output).toHaveLength(1)
     expect(output[0].id).toBeDefined()
     expect(output[0].nome).toBe('nome_valido')
+  })
+
+  test('deve retornar o livro caso encontre pelo nome ou ISBN utilizando o ISBN', async () => {
+    await typeormLivrosRepository.save(livroDTO)
+
+    const output = await sut.buscarPorNomeOuISBN('ISBN_valido')
+    expect(output).toHaveLength(1)
+    expect(output[0].id).toBeDefined()
+    expect(output[0].ISBN).toBe('ISBN_valido')
+  })
+
+  test('deve retornar um array de livro vazio caso não encontre pelo nome ou ISBN utilizando o nome', async () => {
+    const output = await sut.buscarPorNomeOuISBN('nome_invalido')
+    expect(output).toHaveLength(0)
+  })
+
+  test('deve retornar um array de livro vazio caso não encontre pelo nome ou ISBN utilizando o ISBN', async () => {
+    const output = await sut.buscarPorNomeOuISBN('ISBN_invalido')
+    expect(output).toHaveLength(0)
   })
 })
