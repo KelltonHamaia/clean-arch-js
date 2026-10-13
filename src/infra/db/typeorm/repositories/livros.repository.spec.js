@@ -14,8 +14,25 @@ describe('Livros repository', () => {
     ISBN: 'ISBN_valido',
   }
 
-  test('deve retornar undefined (void) ao cadastrar um livro', async () => {
+  beforeEach(async () => {
+    typeormLivrosRepository.deleteAll()
+  })
+
+  test('Deve retornar undefined (void) ao cadastrar um livro', async () => {
     const output = await sut.cadastrar(livroDTO)
     expect(output).toBeUndefined()
+  })
+
+  test('Deve retornar true caso encontre um livro buscando pelo ISBN', async () => {
+    await typeormLivrosRepository.save(livroDTO)
+    const output = await sut.existePorISBN('ISBN_valido')
+
+    expect(output).toBe(true)
+  })
+
+  test('Deve retornar false caso encontre um livro buscando pelo ISBN', async () => {
+    const output = await sut.existePorISBN('ISBN_invalido')
+
+    expect(output).toBe(false)
   })
 })
