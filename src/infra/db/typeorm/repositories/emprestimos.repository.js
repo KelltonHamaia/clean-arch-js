@@ -6,8 +6,19 @@ const emprestimosRepository = () => {
     await typeormEmprestimosRepository.save({ usuario_id, livro_id, data_saida, data_retorno })
   }
 
+  const devolver = async ({ emprestimo_id, data_devolucao }) => {
+    await typeormEmprestimosRepository.update(
+      { id: emprestimo_id },
+      {
+        data_devolucao: data_devolucao,
+      },
+    )
+    return await typeormEmprestimosRepository.findOneBy({ id: emprestimo_id })
+  }
+
   return {
     emprestar,
+    devolver,
   }
 }
 
