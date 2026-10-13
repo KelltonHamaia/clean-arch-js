@@ -52,11 +52,33 @@ describe('Emprestimos repository', () => {
       data_retorno: '2026-10-12',
     })
 
-    const output = await sut.devolver({
+    const { data_retorno } = await sut.devolver({
       emprestimo_id: emprestimo.id,
       data_devolucao: '2026-10-12',
     })
 
-    expect(output.data_retorno).toBe(emprestimo.data_retorno)
+    expect(data_retorno).toBe(emprestimo.data_retorno)
+  })
+
+  test('Deve atualizar a data de devolução no banco de dados corretamente', async () => {
+    const [usuario, livro] = await Promise.all([
+      typeormUsuariosRepository.save(usuarioDTO),
+      typeormLivrosRepository.save(livroDTO),
+    ])
+
+    const emprestimo = await typeormEmprestimosRepository.save({
+      usuario_id: usuario.id,
+      livro_id: livro.id,
+      data_saida: '2026-10-12',
+      data_retorno: '2026-10-12',
+    })
+
+    await sut.devolver({
+      emprestimo_id: emprestimo.id,
+      data_devolucao: '2026-10-12',
+    })
+
+    const emprestimoAtualizado = await typeormEmprestimosRepository.findOneBy({ id: emprestimo.id })
+    expect(emprestimoAtualizado.data_devolucao).toBe('2026-10-12')
   })
 })

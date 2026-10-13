@@ -13,7 +13,8 @@ const emprestimosRepository = () => {
         data_devolucao: data_devolucao,
       },
     )
-    return await typeormEmprestimosRepository.findOneBy({ id: emprestimo_id })
+    const { data_retorno } = await typeormEmprestimosRepository.findOneBy({ id: emprestimo_id })
+    return { data_retorno }
   }
 
   return {
