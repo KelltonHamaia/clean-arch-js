@@ -164,4 +164,35 @@ describe('Emprestimos repository', () => {
 
     expect(output).toBe(false)
   })
+
+  test('Deve retornar o emprestimo buscado por ID com o usuario e o livro', async () => {
+    const [usuario, livro] = await Promise.all([
+      typeormUsuariosRepository.save(usuarioDTO),
+      typeormLivrosRepository.save(livroDTO),
+    ])
+
+    const emprestimo = await typeormEmprestimosRepository.save({
+      usuario_id: usuario.id,
+      livro_id: livro.id,
+      data_saida: '2026-10-12',
+      data_retorno: '2026-10-12',
+    })
+
+    const buscarEmprestimoComLivroComUsuarioPorID =
+      await sut.buscarEmprestimoComLivroComUsuarioPorID(emprestimo.id)
+
+    expect(buscarEmprestimoComLivroComUsuarioPorID).toEqual({
+      id: emprestimo.id,
+      data_saida: '2026-10-12',
+      data_retorno: '2026-10-12',
+      usuario: {
+        nome_completo: 'NOME_COMPLETO_VALIDO',
+        CPF: 'CPF_VALIDO',
+        email: 'EMAIL_VALIDO',
+      },
+      livro: {
+        nome: 'nome_valido',
+      },
+    })
+  })
 })

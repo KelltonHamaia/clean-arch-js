@@ -51,11 +51,35 @@ const emprestimosRepository = () => {
     return pendentes > 0
   }
 
+  const buscarEmprestimoComLivroComUsuarioPorID = async (emprestimo_id) => {
+    const emprestimo = await typeormEmprestimosRepository.findOne({
+      where: {
+        id: emprestimo_id,
+      },
+      relations: ['usuario', 'livro'],
+      select: {
+        id: true,
+        data_saida: true,
+        data_retorno: true,
+        usuario: {
+          nome_completo: true,
+          CPF: true,
+          email: true,
+        },
+        livro: {
+          nome: true,
+        },
+      },
+    })
+    return emprestimo
+  }
+
   return {
     emprestar,
     devolver,
     buscarPendentesComLivroComUsuario,
     existeLivroISBNEmprestadoPendenteUsuario,
+    buscarEmprestimoComLivroComUsuarioPorID,
   }
 }
 
