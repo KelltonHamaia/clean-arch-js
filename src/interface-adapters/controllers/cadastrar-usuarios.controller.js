@@ -1,3 +1,5 @@
+const httpResponse = require('../../shared/helpers/http.response')
+
 module.exports = async function cadastrarUsuariosController({
   cadastrarUsuarioUseCase,
   httpRequest,
@@ -6,7 +8,7 @@ module.exports = async function cadastrarUsuariosController({
   const output = await cadastrarUsuarioUseCase({ nome_completo, CPF, telefone, endereco, email })
 
   return output.fold(
-    (error) => httpRequest(400, error.message),
-    () => httpRequest(201, null),
+    (error) => httpResponse(400, error.message),
+    () => httpResponse(201, null),
   )
 }
