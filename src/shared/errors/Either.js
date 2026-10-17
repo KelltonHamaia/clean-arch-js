@@ -33,6 +33,10 @@ class Either {
       message: 'Livro com ISBN já emprestado ao usuário e ainda não devolvido',
     }
   }
+
+  fold(leftFn, rightFn) {
+    return this.left !== null ? leftFn(this.left) : rightFn(this.right)
+  }
 }
 
 module.exports = Either
