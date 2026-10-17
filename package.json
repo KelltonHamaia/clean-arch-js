@@ -24,6 +24,7 @@
     "sqlite3": "^5.1.7"
   },
   "dependencies": {
-    "typeorm": "^0.3.31"
+    "typeorm": "^0.3.31",
+    "zod": "^4.6.7"
   }
 }

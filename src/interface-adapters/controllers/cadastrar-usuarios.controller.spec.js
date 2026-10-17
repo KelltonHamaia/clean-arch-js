@@ -1,3 +1,4 @@
+const { ZodError } = require('zod')
 const { Either, AppError } = require('../../shared/errors')
 const httpResponse = require('../../shared/helpers/http.response')
 const cadastrarUsuariosController = require('./cadastrar-usuarios.controller')
@@ -10,10 +11,10 @@ describe('Cadastrar usuario controller', () => {
     const httpRequest = {
       body: {
         nome_completo: 'nome_completo_valido',
-        CPF: 'cpf_valido',
+        CPF: '123.456.789-09',
         telefone: 'telefone_valido',
         endereco: 'endereco_valido',
-        email: 'email_valido',
+        email: 'emailvalido@gmail.com',
       },
     }
     const response = await cadastrarUsuariosController({
@@ -37,10 +38,10 @@ describe('Cadastrar usuario controller', () => {
     const httpRequest = {
       body: {
         nome_completo: 'nome_completo_valido',
-        CPF: 'cpf_valido',
+        CPF: '123.456.789-09',
         telefone: 'telefone_valido',
         endereco: 'endereco_valido',
-        email: 'email_valido',
+        email: 'emailvalido@gmail.com',
       },
     }
     const response = await cadastrarUsuariosController({
@@ -51,5 +52,18 @@ describe('Cadastrar usuario controller', () => {
     expect(response).toEqual(httpResponse(400, 'Lógica inválida'))
     expect(cadastrarUsuarioUseCase).toHaveBeenCalledTimes(1)
     expect(cadastrarUsuarioUseCase).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('Deve retornar um erro do ZodValidator se der erro na validação dos dados', () => {
+    const httpRequest = {
+      body: {},
+    }
+
+    expect(() =>
+      cadastrarUsuariosController({
+        cadastrarUsuarioUseCase,
+        httpRequest,
+      }),
+    ).rejects.toBeInstanceOf(ZodError)
   })
 })
