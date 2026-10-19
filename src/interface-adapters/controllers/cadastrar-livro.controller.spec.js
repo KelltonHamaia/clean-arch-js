@@ -1,4 +1,4 @@
-const { Either } = require('../../shared/errors')
+const { Either, AppError } = require('../../shared/errors')
 const httpResponse = require('../../shared/helpers/http.response')
 const cadastrarLivroController = require('./cadastrar-livro.controller')
 
@@ -45,5 +45,9 @@ describe('Cadastrar Livro controller', () => {
     expect(response).toEqual(httpResponse(400, 'Validação inválida'))
     expect(cadastrarLivroUseCase).toHaveBeenCalledTimes(1)
     expect(cadastrarLivroUseCase).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('Deve retornar throw AppError se as dependencias não forem fornecidas', () => {
+    expect(() => cadastrarLivroController({})).rejects.toThrow(new AppError(AppError.dependencias))
   })
 })
