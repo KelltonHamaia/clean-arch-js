@@ -30,4 +30,21 @@ describe('Buscar usuario por CPF controller', () => {
     expect(buscarUsuarioPorCPFUseCase).toHaveBeenCalledTimes(1)
     expect(buscarUsuarioPorCPFUseCase).toHaveBeenCalledWith(httpRequest.params)
   })
+
+  test('Deve retornar um httpResponse 200 e null se não encontrar um usuário', async () => {
+    buscarUsuarioPorCPFUseCase.mockResolvedValue(Either.Right(null))
+    const httpRequest = {
+      params: {
+        CPF: '000.000.000-09',
+      },
+    }
+    const response = await buscarUsuarioPorCpfController({
+      buscarUsuarioPorCPFUseCase,
+      httpRequest,
+    })
+
+    expect(response).toEqual(httpResponse(200, null))
+    expect(buscarUsuarioPorCPFUseCase).toHaveBeenCalledTimes(1)
+    expect(buscarUsuarioPorCPFUseCase).toHaveBeenCalledWith(httpRequest.params)
+  })
 })
