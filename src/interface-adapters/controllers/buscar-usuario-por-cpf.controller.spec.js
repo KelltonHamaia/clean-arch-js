@@ -55,7 +55,7 @@ describe('Buscar usuario por CPF controller', () => {
     )
   })
 
-  test('Deve retornar um ZodError caso o erro lançado seja de validação do Zod', async () => {
+  test('Deve retornar um ZodError caso o erro lançado seja de validação do Zod pelo campo CPF não ter sido informado corretamente', async () => {
     const httpRequestErro = {
       params: {
         CPF: 'CPF_INVALIDO',
