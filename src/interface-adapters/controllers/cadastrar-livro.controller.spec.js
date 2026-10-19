@@ -1,3 +1,4 @@
+const { ZodError } = require('zod')
 const { Either, AppError } = require('../../shared/errors')
 const httpResponse = require('../../shared/helpers/http.response')
 const cadastrarLivroController = require('./cadastrar-livro.controller')
@@ -49,5 +50,16 @@ describe('Cadastrar Livro controller', () => {
 
   test('Deve retornar throw AppError se as dependencias não forem fornecidas', () => {
     expect(() => cadastrarLivroController({})).rejects.toThrow(new AppError(AppError.dependencias))
+  })
+
+  test('Deve retornar um erro do ZodError se os campos não forem informados corretamente', async () => {
+    await expect(() =>
+      cadastrarLivroController({
+        cadastrarLivroUseCase,
+        httpRequest: {
+          body: {},
+        },
+      }),
+    ).rejects.toBeInstanceOf(ZodError)
   })
 })
