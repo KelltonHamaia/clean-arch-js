@@ -25,4 +25,25 @@ describe('Cadastrar Livro controller', () => {
     expect(cadastrarLivroUseCase).toHaveBeenCalledTimes(1)
     expect(cadastrarLivroUseCase).toHaveBeenCalledWith(httpRequest.body)
   })
+
+  test('Deve retornar um httpResponse 400 e message se o livro não for cadastrado com sucesso por lógica no usecase ', async () => {
+    const httpRequest = {
+      body: {
+        nome: 'nome_valido',
+        quantidade: 1,
+        autor: 'autor_valido',
+        genero: 'genero_valido',
+        ISBN: 'ISBN_JA_CADASTRADO',
+      },
+    }
+    cadastrarLivroUseCase.mockResolvedValue(Either.Left({ message: 'Validação inválida' }))
+    const response = await cadastrarLivroController({
+      cadastrarLivroUseCase,
+      httpRequest,
+    })
+
+    expect(response).toEqual(httpResponse(400, 'Validação inválida'))
+    expect(cadastrarLivroUseCase).toHaveBeenCalledTimes(1)
+    expect(cadastrarLivroUseCase).toHaveBeenCalledWith(httpRequest.body)
+  })
 })
