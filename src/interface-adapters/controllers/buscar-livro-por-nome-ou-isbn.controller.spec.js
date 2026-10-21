@@ -1,7 +1,7 @@
 const { ZodError } = require('zod')
 const { Either, AppError } = require('../../shared/errors')
 const httpResponse = require('../../shared/helpers/http.response')
-const buscarLivroPorNomeOuIsbnController = require('./buscar-livro-por-nome-ou-isbn.controller')
+const buscarLivroPorNomeOuISBNController = require('./buscar-livro-por-nome-ou-isbn.controller')
 
 describe('Buscar livro por nome ou ISBN controller', () => {
   const buscarLivroPorNomeOuISBNUseCase = jest.fn()
@@ -24,7 +24,7 @@ describe('Buscar livro por nome ou ISBN controller', () => {
     ]
     buscarLivroPorNomeOuISBNUseCase.mockResolvedValue(Either.Right(livrosDTO))
 
-    const response = await buscarLivroPorNomeOuIsbnController({
+    const response = await buscarLivroPorNomeOuISBNController({
       buscarLivroPorNomeOuISBNUseCase,
       httpRequest,
     })
@@ -42,7 +42,7 @@ describe('Buscar livro por nome ou ISBN controller', () => {
     }
     buscarLivroPorNomeOuISBNUseCase.mockResolvedValue(Either.Right([]))
 
-    const response = await buscarLivroPorNomeOuIsbnController({
+    const response = await buscarLivroPorNomeOuISBNController({
       buscarLivroPorNomeOuISBNUseCase,
       httpRequest,
     })
@@ -53,7 +53,7 @@ describe('Buscar livro por nome ou ISBN controller', () => {
   })
 
   test('Deve retornar um throw AppError se as dependencias não forem informadas', async () => {
-    await expect(() => buscarLivroPorNomeOuIsbnController({})).rejects.toThrow(
+    await expect(() => buscarLivroPorNomeOuISBNController({})).rejects.toThrow(
       new AppError(AppError.dependencias),
     )
   })
@@ -64,7 +64,7 @@ describe('Buscar livro por nome ou ISBN controller', () => {
     }
 
     await expect(() =>
-      buscarLivroPorNomeOuIsbnController({ buscarLivroPorNomeOuISBNUseCase, httpRequest }),
+      buscarLivroPorNomeOuISBNController({ buscarLivroPorNomeOuISBNUseCase, httpRequest }),
     ).rejects.toBeInstanceOf(ZodError)
   })
 })
