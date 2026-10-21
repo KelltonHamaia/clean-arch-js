@@ -32,4 +32,22 @@ describe('Buscar livro por nome ou ISBN controller', () => {
     expect(buscarLivroPorNomeOuISBNUseCase).toHaveBeenCalledTimes(1)
     expect(buscarLivroPorNomeOuISBNUseCase).toHaveBeenCalledWith(httpRequest.query)
   })
+
+  test('Deve retornar httpReponse 200 e um array vazio de livros se nenhum livro for encontrados com o valor informado', async () => {
+    const httpRequest = {
+      query: {
+        valor: 'ISBN_NAO_CADASTRADO',
+      },
+    }
+    buscarLivroPorNomeOuISBNUseCase.mockResolvedValue(Either.Right([]))
+
+    const response = await buscarLivroPorNomeOuIsbnController({
+      buscarLivroPorNomeOuISBNUseCase,
+      httpRequest,
+    })
+
+    expect(response).toEqual(httpResponse(200, []))
+    expect(buscarLivroPorNomeOuISBNUseCase).toHaveBeenCalledTimes(1)
+    expect(buscarLivroPorNomeOuISBNUseCase).toHaveBeenCalledWith(httpRequest.query)
+  })
 })
