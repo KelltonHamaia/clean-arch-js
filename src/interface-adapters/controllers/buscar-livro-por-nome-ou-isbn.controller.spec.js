@@ -1,3 +1,4 @@
+const { ZodError } = require('zod')
 const { Either, AppError } = require('../../shared/errors')
 const httpResponse = require('../../shared/helpers/http.response')
 const buscarLivroPorNomeOuIsbnController = require('./buscar-livro-por-nome-ou-isbn.controller')
@@ -55,5 +56,15 @@ describe('Buscar livro por nome ou ISBN controller', () => {
     await expect(() => buscarLivroPorNomeOuIsbnController({})).rejects.toThrow(
       new AppError(AppError.dependencias),
     )
+  })
+
+  test('Deve retornar um ZodError se os campos de busca não forem informados corretamente', async () => {
+    const httpRequest = {
+      query: {},
+    }
+
+    await expect(() =>
+      buscarLivroPorNomeOuIsbnController({ buscarLivroPorNomeOuISBNUseCase, httpRequest }),
+    ).rejects.toBeInstanceOf(ZodError)
   })
 })
