@@ -1,5 +1,6 @@
 const { z } = require('zod')
 const httpResponse = require('../../shared/helpers/http.response')
+const { AppError } = require('../../shared/errors')
 
 const zodValidator = z.object({
   usuario_id: z.number('Campo usuario_id é obrigatório'),
@@ -9,6 +10,11 @@ const zodValidator = z.object({
 })
 
 module.exports = async function emprestarLivroController({ emprestarLivroUseCase, httpRequest }) {
+  const checaDependencias = emprestarLivroUseCase && httpRequest.body
+  if (!checaDependencias) {
+    throw new AppError(AppError.dependencias)
+  }
+
   const { usuario_id, livro_id, data_saida, data_retorno } = zodValidator.parse(httpRequest.body)
   const output = await emprestarLivroUseCase({
     usuario_id,

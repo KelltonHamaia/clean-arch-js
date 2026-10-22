@@ -1,4 +1,4 @@
-const { Either } = require('../../shared/errors')
+const { Either, AppError } = require('../../shared/errors')
 const httpResponse = require('../../shared/helpers/http.response')
 const emprestarLivroController = require('./emprestar-livro.controller')
 
@@ -49,5 +49,11 @@ describe('Emprestar livro controller', () => {
       data_retorno: expect.any(Date),
     })
     expect(emprestarLivroUseCase).toHaveBeenCalledTimes(1)
+  })
+
+  test('Deve retornar um erro se o EmprestarLivroUseCase e o httpRequest não forem fornecidos', async () => {
+    await expect(() => emprestarLivroController({})).rejects.toEqual(
+      new AppError(AppError.dependencias),
+    )
   })
 })
