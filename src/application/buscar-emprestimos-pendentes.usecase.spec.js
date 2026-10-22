@@ -1,3 +1,4 @@
+const buscarPendentes = require('../../tests/fixtures/buscar-pendentes')
 const { AppError } = require('../shared/errors')
 const buscarEmprestimosPendentesUsecase = require('./buscar-emprestimos-pendentes.usecase')
 
@@ -7,30 +8,7 @@ describe('Buscar emprestimos pendentes useCase', () => {
   }
 
   test('Deve ser possível buscar os empréstimos pendentes', async () => {
-    emprestimosRepository.buscarPendentesComLivroComUsuario.mockResolvedValue([
-      {
-        usuario: {
-          nome: 'qualquer_nome_valido_usuario',
-          CPF: 'qualquer_cpf_valido_usuario',
-        },
-        livro: {
-          nome: 'qualquer_nome_livro_valido_usuario',
-        },
-        data_saida: '2026-10-08',
-        data_retorno: '2026-10-10',
-      },
-      {
-        usuario: {
-          nome: 'qualquer_nome_valido',
-          CPF: 'qualquer_cpf_valido',
-        },
-        livro: {
-          nome: 'qualquer_nome_livro_valido',
-        },
-        data_saida: '2026-10-05',
-        dataRetorno: '2026-10-10',
-      },
-    ])
+    emprestimosRepository.buscarPendentesComLivroComUsuario.mockResolvedValue(buscarPendentes)
 
     const sut = buscarEmprestimosPendentesUsecase({ emprestimosRepository })
     const output = await sut()
