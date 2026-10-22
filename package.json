@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "dev": "node --watch src/main/api/server.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "sqlite3": "^5.1.7"
   },
   "dependencies": {
+    "express": "^5.3.0",
     "typeorm": "^0.3.31",
     "zod": "^4.6.7"
   }
