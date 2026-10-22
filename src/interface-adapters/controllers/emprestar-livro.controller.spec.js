@@ -27,4 +27,27 @@ describe('Emprestar livro controller', () => {
     })
     expect(emprestarLivroUseCase).toHaveBeenCalledTimes(1)
   })
+
+  test('Deve retornar httpResponse 400 e Error.message se o empréstimo não for realizado com sucesso por lógica do usecase ', async () => {
+    const httpRequest = {
+      body: {
+        usuario_id: 1,
+        livro_id: 1,
+        data_saida: '2026-10-21',
+        data_retorno: '2026-10-20',
+      },
+    }
+
+    emprestarLivroUseCase.mockResolvedValue(Either.Left({ message: 'Validação inválida' }))
+    const response = await emprestarLivroController({ emprestarLivroUseCase, httpRequest })
+
+    expect(response).toEqual(httpResponse(400, 'Validação inválida'))
+    expect(emprestarLivroUseCase).toHaveBeenCalledWith({
+      usuario_id: 1,
+      livro_id: 1,
+      data_saida: expect.any(Date),
+      data_retorno: expect.any(Date),
+    })
+    expect(emprestarLivroUseCase).toHaveBeenCalledTimes(1)
+  })
 })
