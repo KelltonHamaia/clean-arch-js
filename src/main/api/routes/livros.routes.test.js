@@ -59,4 +59,12 @@ describe('Livros routes', () => {
     expect(body).toHaveLength(1)
     expect(body[0]).toEqual(expect.objectContaining(livroDTO))
   })
+
+  test('Deve retornar body de length 0 se não encontrar nenhum livro por nome ou isbn', async () => {
+    const { statusCode, body } = await request(app)
+      .get('/livros')
+      .query({ valor: 'NOME_OU_ISBN_NAO_CADASTRADO' })
+    expect(statusCode).toBe(200)
+    expect(body).toHaveLength(0)
+  })
 })
