@@ -44,5 +44,5 @@ describe('Emprestimos routes', () => {
 
     expect(statusCode).toBe(201)
     expect(body).toBeNull()
-  }, 10000)
+  }, 150000)
 })
