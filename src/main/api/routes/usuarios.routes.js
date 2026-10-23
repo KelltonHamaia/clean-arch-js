@@ -12,7 +12,7 @@ usuariosRoutes.post('/', async (req, res) => {
   return res.status(statusCode).json(body)
 })
 
-usuariosRoutes.get('/cpf/:cpf', async (req, res) => {
+usuariosRoutes.get('/cpf/:CPF', async (req, res) => {
   const httpRequest = {
     params: req.params,
   }

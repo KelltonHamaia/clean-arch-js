@@ -34,4 +34,20 @@ describe('Usuarios routes', () => {
       email: ['Campo email é obrigatório'],
     })
   })
+
+  test('Deve retornar um usuário ao buscar pelo CPF', async () => {
+    const usuarioDTO = {
+      nome_completo: 'nome_valido',
+      CPF: '123.123.123-12',
+      endereco: 'endereco_valido',
+      telefone: 'telefone_valido',
+      email: 'emailvalido@gmail.com',
+    }
+    await typeormUsuariosRepository.save(usuarioDTO)
+    const { statusCode, body } = await request(app).get('/usuarios/cpf/123.123.123-12')
+
+    expect(statusCode).toBe(200)
+    expect(body.id).toBeDefined()
+    expect(body).toEqual(expect.objectContaining(usuarioDTO))
+  })
 })
