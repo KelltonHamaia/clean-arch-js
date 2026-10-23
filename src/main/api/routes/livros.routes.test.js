@@ -67,4 +67,26 @@ describe('Livros routes', () => {
     expect(statusCode).toBe(200)
     expect(body).toHaveLength(0)
   })
+
+  test('Deve retornar um erro do zod se os campos obrigatórios para cadastrar o livro não forem informados', async () => {
+    const { statusCode, body } = await request(app).post('/livros').send({})
+    expect(statusCode).toBe(400)
+    expect(body.message).toBe('Erro na validação.')
+    expect(body.erros.fieldErrors).toEqual({
+      nome: ['Campo nome é obrigatório'],
+      quantidade: ['Campo quantidade é obrigatório'],
+      autor: ['Campo autor é obrigatório'],
+      genero: ['Campo genero é obrigatório'],
+      ISBN: ['Campo ISBN é obrigatório'],
+    })
+  })
+
+  test('Deve retornar um erro do zod se o campo valor não for informado para a busca de um livro por nome ou isbn', async () => {
+    const { statusCode, body } = await request(app).get('/livros').query()
+    expect(statusCode).toBe(400)
+    expect(body.message).toBe('Erro na validação.')
+    expect(body.erros.fieldErrors).toEqual({
+      valor: ['Campo valor é obrigatório'],
+    })
+  })
 })
