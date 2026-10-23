@@ -14,7 +14,7 @@ livrosRoutes.post('/', async (req, res) => {
 
 livrosRoutes.get('/', async (req, res) => {
   const httpRequest = {
-    query: req.query,
+    query: { ...req.query },
   }
   const { statusCode, body } = await buscarLivroPorNomeOuIsbnCompose(httpRequest)
   res.status(statusCode).json(body)

@@ -14,7 +14,6 @@ module.exports = async function buscarLivroPorNomeOuISBNController({
   if (!checaDependencias) {
     throw new AppError(AppError.dependencias)
   }
-
   const { valor } = zodValidator.parse(httpRequest.query)
   const output = await buscarLivroPorNomeOuISBNUseCase({ valor })
   return output.fold(
