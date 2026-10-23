@@ -104,4 +104,32 @@ describe('Emprestimos routes', () => {
       data_devolucao: ['Campo data_devolucao é obrigatório'],
     })
   })
+
+  test('Deve retornar 200 e um array de emprestimos pendentes', async () => {
+    const [usuario, livro] = await Promise.all([
+      typeormUsuariosRepository.save(usuarioDTO),
+      typeormLivrosRepository.save(livroDTO),
+    ])
+
+    await typeormEmprestimosRepository.save([
+      {
+        livro_id: livro.id,
+        usuario_id: usuario.id,
+        data_saida: '2026-10-23',
+        data_retorno: '2026-10-24',
+        data_devolucao: '2026-10-24',
+      },
+      {
+        livro_id: livro.id,
+        usuario_id: usuario.id,
+        data_saida: '2026-10-23',
+        data_retorno: '2026-10-24',
+      },
+    ])
+
+    const { statusCode, body } = await request(app).get('/emprestimos')
+
+    expect(statusCode).toBe(200)
+    expect(body).toHaveLength(1)
+  })
 })
