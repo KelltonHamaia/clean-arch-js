@@ -96,4 +96,12 @@ describe('Emprestimos routes', () => {
     expect(statusCode).toBe(200)
     expect(body).toBe('Multa por atraso: R$ 10,00')
   })
+
+  test('Deve retornar um erro caso os campos obrigatórios não tenham sido informados', async () => {
+    const { statusCode, body } = await request(app).put(`/emprestimos/devolver/99`).send({})
+    expect(statusCode).toBe(400)
+    expect(body.erros.fieldErrors).toEqual({
+      data_devolucao: ['Campo data_devolucao é obrigatório'],
+    })
+  })
 })
