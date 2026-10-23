@@ -41,4 +41,22 @@ describe('Livros routes', () => {
     expect(body).toHaveLength(1)
     expect(body[0]).toEqual(expect.objectContaining(livroDTO))
   })
+
+  test('Deve ser possível buscar um livro pelo ISBN', async () => {
+    const livroDTO = {
+      nome: 'nome_valido_teste',
+      quantidade: 1,
+      autor: 'autor_valido_teste',
+      genero: 'genero_valido_teste',
+      ISBN: 'ISBN_valido_teste_busca',
+    }
+    await typeormLivrosRepository.save(livroDTO)
+
+    const { statusCode, body } = await request(app)
+      .get('/livros')
+      .query({ valor: 'ISBN_valido_teste_busca' })
+    expect(statusCode).toBe(200)
+    expect(body).toHaveLength(1)
+    expect(body[0]).toEqual(expect.objectContaining(livroDTO))
+  })
 })
