@@ -21,4 +21,17 @@ describe('Usuarios routes', () => {
     expect(statusCode).toBe(201)
     expect(body).toBeNull()
   })
+
+  test('Deve retornar um erro com os campos obrigatórios ausentes', async () => {
+    const { statusCode, body } = await request(app).post('/usuarios').send({})
+    expect(statusCode).toBe(400)
+    expect(body.message).toBe('Erro na validação.')
+    expect(body.erros.fieldErrors).toEqual({
+      nome_completo: ['Campo nome_completo é obrigatório'],
+      CPF: ['Campo CPF é obrigatório'],
+      telefone: ['Campo telefone é obrigatório'],
+      endereco: ['Campo endereco é obrigatório'],
+      email: ['Campo email é obrigatório'],
+    })
+  })
 })
