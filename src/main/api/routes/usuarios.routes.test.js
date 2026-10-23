@@ -50,4 +50,11 @@ describe('Usuarios routes', () => {
     expect(body.id).toBeDefined()
     expect(body).toEqual(expect.objectContaining(usuarioDTO))
   })
+
+  test('Deve retornar null se ao buscar pelo CPF não não encontrar um usuário', async () => {
+    const { statusCode, body } = await request(app).get('/usuarios/cpf/000.000.000-00')
+
+    expect(statusCode).toBe(200)
+    expect(body).toBeNull()
+  })
 })
