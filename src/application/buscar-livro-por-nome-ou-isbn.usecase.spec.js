@@ -3,7 +3,7 @@ const buscarLivroPorNomeOuIsbnUseCase = require('./buscar-livro-por-nome-ou-isbn
 
 describe('Buscar livro por nome ou ISBN usecase', () => {
   const livrosRepository = {
-    buscarLivroPorNomeOuISBN: jest.fn(),
+    buscarPorNomeOuISBN: jest.fn(),
   }
 
   test('Deve retornar um array de livros válidos ao buscar por nome ou ISBN existentes', async () => {
@@ -20,14 +20,14 @@ describe('Buscar livro por nome ou ISBN usecase', () => {
         ISBN: 'ISBN_valido',
       },
     ]
-    livrosRepository.buscarLivroPorNomeOuISBN.mockResolvedValue(outputDTO)
+    livrosRepository.buscarPorNomeOuISBN.mockResolvedValue(outputDTO)
 
     const sut = buscarLivroPorNomeOuIsbnUseCase({ livrosRepository })
     const output = await sut(nomeOuISBNDTO)
 
     expect(output.right).toEqual(outputDTO)
-    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledWith(nomeOuISBNDTO.valor)
-    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledTimes(1)
+    expect(livrosRepository.buscarPorNomeOuISBN).toHaveBeenCalledWith(nomeOuISBNDTO.valor)
+    expect(livrosRepository.buscarPorNomeOuISBN).toHaveBeenCalledTimes(1)
   })
 
   test('Deve retornar um array vazio se não existir um livro por nome ou ISBN informados', async () => {
@@ -35,14 +35,14 @@ describe('Buscar livro por nome ou ISBN usecase', () => {
       valor: 'valor_NOME_ISBN_nao_cadastrado',
     }
     const outputDTO = []
-    livrosRepository.buscarLivroPorNomeOuISBN.mockResolvedValue(outputDTO)
+    livrosRepository.buscarPorNomeOuISBN.mockResolvedValue(outputDTO)
 
     const sut = buscarLivroPorNomeOuIsbnUseCase({ livrosRepository })
     const output = await sut(nomeOuISBNDTO)
 
     expect(output.right).toEqual(outputDTO)
-    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledWith(nomeOuISBNDTO.valor)
-    expect(livrosRepository.buscarLivroPorNomeOuISBN).toHaveBeenCalledTimes(1)
+    expect(livrosRepository.buscarPorNomeOuISBN).toHaveBeenCalledWith(nomeOuISBNDTO.valor)
+    expect(livrosRepository.buscarPorNomeOuISBN).toHaveBeenCalledTimes(1)
   })
 
   test('Deve retornar um throw AppError se o livrosRepository nao for fornecido', () => {

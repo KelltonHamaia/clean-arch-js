@@ -10,7 +10,7 @@ module.exports = function buscarLivroPorNomeOuISBNUseCase({ livrosRepository }) 
       throw new AppError(AppError.parametrosObrigatoriosAusentes)
     }
 
-    const resultado = await livrosRepository.buscarLivroPorNomeOuISBN(valor)
+    const resultado = await livrosRepository.buscarPorNomeOuISBN(valor)
     return Either.Right(resultado)
   }
 }
