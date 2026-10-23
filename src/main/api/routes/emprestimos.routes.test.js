@@ -10,6 +10,8 @@ const {
   typeormEmprestimosRepository,
 } = require('../../../infra/db/typeorm/repositories/emprestimos.repository')
 
+jest.setTimeout(20000)
+
 describe('Emprestimos routes', () => {
   beforeEach(async () => {
     await typeormEmprestimosRepository.query('DELETE FROM emprestimos')
@@ -47,7 +49,7 @@ describe('Emprestimos routes', () => {
 
     expect(statusCode).toBe(201)
     expect(body).toBeNull()
-  }, 150000)
+  })
 
   test('Deve rotornar 200 e a mensagem de multa não aplicada', async () => {
     const [usuario, livro] = await Promise.all([
@@ -63,7 +65,7 @@ describe('Emprestimos routes', () => {
     })
 
     const { statusCode, body } = await request(app)
-      .put(`/emprestimos/:${emprestimo.id}/devolver`)
+      .put(`/emprestimos/devolver/${emprestimo.id}`)
       .send({
         data_devolucao: '2026-10-24',
       })
