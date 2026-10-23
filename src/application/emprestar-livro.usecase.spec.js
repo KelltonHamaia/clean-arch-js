@@ -3,7 +3,7 @@ const emprestarLivroUsecase = require('./emprestar-livro.usecase')
 
 describe('Emprestar livro UseCase', () => {
   const emprestimosRepository = {
-    existeLivroISBNEmprestimoPendenteUsuario: jest.fn(),
+    existeLivroISBNEmprestadoPendenteUsuario: jest.fn(),
     emprestar: jest.fn(),
     buscarEmprestimoComLivroComUsuarioPorID: jest.fn(),
   }
@@ -39,7 +39,7 @@ describe('Emprestar livro UseCase', () => {
     const output = await sut(emprestarLivroDTO)
 
     expect(output.right).toBeNull()
-    expect(emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario).toHaveBeenCalledWith({
+    expect(emprestimosRepository.existeLivroISBNEmprestadoPendenteUsuario).toHaveBeenCalledWith({
       usuario_id: emprestarLivroDTO.usuario_id,
       livro_id: emprestarLivroDTO.livro_id,
     })
@@ -81,16 +81,16 @@ describe('Emprestar livro UseCase', () => {
       data_saida: new Date('2026-10-01'),
       data_retorno: new Date('2026-10-01'),
     }
-    emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario.mockResolvedValue(true)
+    emprestimosRepository.existeLivroISBNEmprestadoPendenteUsuario.mockResolvedValue(true)
     const sut = emprestarLivroUsecase({ emprestimosRepository, emailService })
     const output = await sut(emprestarLivroDTO)
 
     expect(output.left).toEqual(Either.livroISBNEmprestimoPendenteUsuario())
-    expect(emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario).toHaveBeenCalledWith({
+    expect(emprestimosRepository.existeLivroISBNEmprestadoPendenteUsuario).toHaveBeenCalledWith({
       usuario_id: emprestarLivroDTO.usuario_id,
       livro_id: emprestarLivroDTO.livro_id,
     })
-    expect(emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario).toHaveBeenCalledTimes(1)
+    expect(emprestimosRepository.existeLivroISBNEmprestadoPendenteUsuario).toHaveBeenCalledTimes(1)
   })
 
   test('Deve retornar um throw AppError caso o emprestimosRepository não seja fornecido', () => {

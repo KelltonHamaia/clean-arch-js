@@ -1,3 +1,4 @@
+const nodemailerService = require('../../../infra/email/nodemailer')
 const emprestarLivroUsecase = require('../../../application/emprestar-livro.usecase')
 const {
   emprestimosRepository,
@@ -6,8 +7,10 @@ const emprestarLivroController = require('../../../interface-adapters/controller
 
 module.exports = async function emprestarLivroCompose(httpRequest) {
   const emprestimosRepositoryFn = emprestimosRepository()
+  const emailServiceFn = nodemailerService()
   const emprestarLivroUsecaseFn = emprestarLivroUsecase({
     emprestimosRepository: emprestimosRepositoryFn,
+    emailService: emailServiceFn,
   })
 
   const controller = emprestarLivroController({

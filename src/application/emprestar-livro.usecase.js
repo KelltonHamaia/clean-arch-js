@@ -16,7 +16,7 @@ module.exports = function emprestarLivroUsecase({ emprestimosRepository, emailSe
     }
 
     const existeLivroISBNEmprestimoPendenteUsuario =
-      await emprestimosRepository.existeLivroISBNEmprestimoPendenteUsuario({
+      await emprestimosRepository.existeLivroISBNEmprestadoPendenteUsuario({
         usuario_id,
         livro_id,
       })
@@ -38,7 +38,7 @@ module.exports = function emprestarLivroUsecase({ emprestimosRepository, emailSe
     await emailService.enviarEmail({
       data_saida,
       data_retorno,
-      nome_usuario: usuario.nome,
+      nome_usuario: usuario.nome_completo,
       email: usuario.email,
       CPF: usuario.CPF,
       nome_livro: livro.nome,
