@@ -52,7 +52,7 @@ describe('Emprestar livro UseCase', () => {
     expect(emailService.enviarEmail).toHaveBeenCalledWith({
       data_retorno: emprestarLivroDTO.data_retorno,
       data_saida: emprestarLivroDTO.data_saida,
-      nome_usuario: emprestimoComLivroComUsuarioPorIDDTO.usuario.nome,
+      nome_usuario: emprestimoComLivroComUsuarioPorIDDTO.usuario.nome_usuario,
       email: emprestimoComLivroComUsuarioPorIDDTO.usuario.email,
       CPF: emprestimoComLivroComUsuarioPorIDDTO.usuario.CPF,
       nome_livro: emprestimoComLivroComUsuarioPorIDDTO.livro.nome,
