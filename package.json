@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch src/main/api/server.js",
     "test": "cross-env NODE_ENV=test jest --runInBand",
-    "test:integration": "cross-env NODE_ENV=integration jest --config=jest.integration.js --runInBand"
+    "test:integration": "cross-env NODE_ENV=integration jest --config=jest.integration.js --runInBand",
+    "test:all": "npm test && npm run test:integration"
   },
   "repository": {
     "type": "git",
