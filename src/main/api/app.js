@@ -1,16 +1,31 @@
 const express = require('express')
+const { createBullBoard } = require('@bull-board/api')
+const { BullAdapter } = require('@bull-board/api/bullAdapter')
+const { ExpressAdapter } = require('@bull-board/express')
+
 const { routes } = require('./routes')
 const { ZodError } = require('zod')
 const typeormServer = require('../../infra/db/typeorm/setup')
+const { sendMailQueue } = require('../../infra/queue/bull')
 
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+const serverAdapter = new ExpressAdapter()
+serverAdapter.setBasePath('/queues')
+
+createBullBoard({
+  queues: [new BullAdapter(sendMailQueue)],
+  serverAdapter,
+})
+
 typeormServer
   .initialize()
   .then(() => {
     app.use(routes)
+    app.use('/queues', serverAdapter.getRouter())
+
     app.use((error, req, res, next) => {
       if (process.env.NODE_ENV === 'development') {
         console.log(error)
