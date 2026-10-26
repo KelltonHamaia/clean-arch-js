@@ -1,3 +1,4 @@
+const { sendMailQueue } = require('../infra/queue/bull')
 const { AppError, Either } = require('../shared/errors')
 
 module.exports = function emprestarLivroUsecase({ emprestimosRepository, emailService }) {
@@ -35,13 +36,11 @@ module.exports = function emprestarLivroUsecase({ emprestimosRepository, emailSe
     const { usuario, livro } =
       await emprestimosRepository.buscarEmprestimoComLivroComUsuarioPorID(emprestimoId)
 
-    await emailService.enviarEmail({
-      data_saida,
-      data_retorno,
-      nome_usuario: usuario.nome_completo,
-      email: usuario.email,
-      CPF: usuario.CPF,
-      nome_livro: livro.nome,
+    await sendMailQueue.add({
+      data_saida: data_saida.toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+      data_retorno: data_retorno.toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+      usuario,
+      livro,
     })
 
     return Either.Right(null)
