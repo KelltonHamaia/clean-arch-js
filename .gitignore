@@ -148,3 +148,6 @@ vite.config.ts.timestamp-*
 # Turbo Repo
 .turbo
 .docker
+
+# typeorm config
+src/infra/db/typeorm/typeorm.prod.js 
