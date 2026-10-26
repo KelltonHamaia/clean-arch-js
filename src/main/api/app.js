@@ -1,11 +1,12 @@
+require('dotenv/config')
 const express = require('express')
 const { createBullBoard } = require('@bull-board/api')
 const { BullAdapter } = require('@bull-board/api/bullAdapter')
 const { ExpressAdapter } = require('@bull-board/express')
-
-const { routes } = require('./routes')
 const { ZodError } = require('zod')
+
 const typeormServer = require('../../infra/db/typeorm/setup')
+const { routes } = require('./routes')
 const { sendMailQueue } = require('../../infra/queue/bull')
 
 const app = express()
