@@ -42,7 +42,7 @@ describe('Emprestimos repository', () => {
       data_retorno: '2026-10-13',
     })
 
-    expect(output).toBeUndefined()
+    expect(output).toEqual(expect.any(Number))
   })
 
   test('Deve retornar a data de retorno salva no banco de dados corretamente', async () => {

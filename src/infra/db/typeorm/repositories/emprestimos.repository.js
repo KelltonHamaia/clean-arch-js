@@ -4,7 +4,13 @@ const typeormEmprestimosRepository = typeormServer.getRepository('emprestimo')
 
 const emprestimosRepository = () => {
   const emprestar = async ({ usuario_id, livro_id, data_saida, data_retorno }) => {
-    await typeormEmprestimosRepository.save({ usuario_id, livro_id, data_saida, data_retorno })
+    const { id } = await typeormEmprestimosRepository.save({
+      usuario_id,
+      livro_id,
+      data_saida,
+      data_retorno,
+    })
+    return id
   }
 
   const devolver = async ({ emprestimo_id, data_devolucao }) => {
