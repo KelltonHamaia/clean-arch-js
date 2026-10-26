@@ -1,7 +1,7 @@
 module.exports = [
   {
     usuario: {
-      nome: 'qualquer_nome_valido_usuario',
+      nome_completo: 'qualquer_nome_valido_usuario',
       CPF: 'qualquer_cpf_valido_usuario',
     },
     livro: {
@@ -12,7 +12,7 @@ module.exports = [
   },
   {
     usuario: {
-      nome: 'qualquer_nome_valido',
+      nome_completo: 'qualquer_nome_valido',
       CPF: 'qualquer_cpf_valido',
     },
     livro: {
